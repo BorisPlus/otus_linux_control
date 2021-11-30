@@ -100,7 +100,7 @@ cd ./ansible
 
 #### Предварительно
 
-На стенде трафик маршрутизируется исключительно в IPv4. Если не сделать нижеследующее, то у YUM будет отсутствовать доступ к репозиториям, так как по дефолту он в IPv6.
+На стенде трафик маршрутизируется исключительно в IPv4. У меня возникали проблемы с доступом YUM к репозиториям, я отключил IPv6 совсем и пошло быстрее.
 
 ```shell
 ansible-playbook playbooks/disable_ipv6.yml  > ../reports/playbooks/disable_ipv6.txt
@@ -146,6 +146,7 @@ ansible-playbook playbooks/intermediateTestOfNetworkConnectivity.yml  > ../repor
 
 
 [details --no-link]:[iptables --table filter --list](./reports/tests/exit_node-iptables --table filter --list.json)
+
 [details --no-link]:[iptables --table nat --list](./reports/tests/exit_node-iptables --table nat --list.json)
 
 #### Общее. Проверка работоспособности сети

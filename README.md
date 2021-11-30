@@ -482,7 +482,7 @@ cd ./ansible
 
 #### Предварительно
 
-На стенде трафик маршрутизируется исключительно в IPv4. Если не сделать нижеследующее, то у YUM будет отсутствовать доступ к репозиториям, так как по дефолту он в IPv6.
+На стенде трафик маршрутизируется исключительно в IPv4. У меня возникали проблемы с доступом YUM к репозиториям, я отключил IPv6 совсем и пошло быстрее.
 
 ```shell
 ansible-playbook playbooks/disable_ipv6.yml  > ../reports/playbooks/disable_ipv6.txt
@@ -1515,6 +1515,7 @@ target     prot opt source               destination
 
 </details>
 
+
 <details><summary>см. iptables --table nat --list</summary>
 
 ```text
@@ -1908,13 +1909,18 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 </details>
 
 
+<details><summary>см. traceroute 192.168.255.1</summary>
+
 ```text
 traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
  1  internetRouter (192.168.255.1)  0.075 ms  0.028 ms  0.053 ms
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.255.2</summary>
 
 ```text
 traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
@@ -1922,7 +1928,10 @@ traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.0.2</summary>
 
 ```text
 traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
@@ -1931,7 +1940,10 @@ traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.2.194</summary>
 
 ```text
 traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
@@ -1941,7 +1953,10 @@ traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.1.194</summary>
 
 ```text
 traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
@@ -1951,6 +1966,7 @@ traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
 #### centralRouter
 
@@ -1990,13 +2006,18 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 </details>
 
 
+<details><summary>см. traceroute 192.168.255.1</summary>
+
 ```text
 traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
  1  gateway (192.168.255.1)  1.794 ms  1.455 ms  1.283 ms
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.255.2</summary>
 
 ```text
 traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
@@ -2004,7 +2025,10 @@ traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.0.2</summary>
 
 ```text
 traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
@@ -2012,7 +2036,10 @@ traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.2.194</summary>
 
 ```text
 traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
@@ -2021,7 +2048,10 @@ traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.1.194</summary>
 
 ```text
 traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
@@ -2030,6 +2060,7 @@ traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
 #### webServer
 
@@ -2070,6 +2101,8 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 </details>
 
 
+<details><summary>см. traceroute 192.168.255.1</summary>
+
 ```text
 traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
  1  gateway (192.168.0.1)  2.001 ms  1.891 ms  1.768 ms
@@ -2077,7 +2110,10 @@ traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.255.2</summary>
 
 ```text
 traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
@@ -2085,7 +2121,10 @@ traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.0.2</summary>
 
 ```text
 traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
@@ -2093,7 +2132,10 @@ traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.2.194</summary>
 
 ```text
 traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
@@ -2103,7 +2145,10 @@ traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.1.194</summary>
 
 ```text
 traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
@@ -2113,6 +2158,7 @@ traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
 #### appRouter
 
@@ -2153,6 +2199,8 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 </details>
 
 
+<details><summary>см. traceroute 192.168.255.1</summary>
+
 ```text
 traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
  1  gateway (192.168.0.33)  0.282 ms  0.266 ms  0.164 ms
@@ -2160,7 +2208,10 @@ traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.255.2</summary>
 
 ```text
 traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
@@ -2168,7 +2219,10 @@ traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.0.2</summary>
 
 ```text
 traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
@@ -2177,7 +2231,10 @@ traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.2.194</summary>
 
 ```text
 traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
@@ -2185,7 +2242,10 @@ traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.1.194</summary>
 
 ```text
 traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
@@ -2195,6 +2255,7 @@ traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
 #### appServer
 
@@ -2236,6 +2297,8 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 </details>
 
 
+<details><summary>см. traceroute 192.168.255.1</summary>
+
 ```text
 traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
  1  gateway (192.168.2.193)  0.299 ms  0.231 ms  0.176 ms
@@ -2244,7 +2307,10 @@ traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.255.2</summary>
 
 ```text
 traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
@@ -2253,7 +2319,10 @@ traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.0.2</summary>
 
 ```text
 traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
@@ -2263,7 +2332,10 @@ traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.2.194</summary>
 
 ```text
 traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
@@ -2271,7 +2343,10 @@ traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.1.194</summary>
 
 ```text
 traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
@@ -2282,6 +2357,7 @@ traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
 #### dbRouter
 
@@ -2322,6 +2398,8 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 </details>
 
 
+<details><summary>см. traceroute 192.168.255.1</summary>
+
 ```text
 traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
  1  gateway (192.168.0.33)  0.344 ms  0.130 ms  0.502 ms
@@ -2329,7 +2407,10 @@ traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.255.2</summary>
 
 ```text
 traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
@@ -2337,7 +2418,10 @@ traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.0.2</summary>
 
 ```text
 traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
@@ -2346,7 +2430,10 @@ traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.2.194</summary>
 
 ```text
 traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
@@ -2356,7 +2443,10 @@ traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.1.194</summary>
 
 ```text
 traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
@@ -2364,6 +2454,7 @@ traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
 #### dbBackupServer
 
@@ -2405,6 +2496,8 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 </details>
 
 
+<details><summary>см. traceroute 192.168.255.1</summary>
+
 ```text
 traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
  1  gateway (192.168.1.193)  0.493 ms  0.452 ms  0.299 ms
@@ -2413,7 +2506,10 @@ traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.255.2</summary>
 
 ```text
 traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
@@ -2422,7 +2518,10 @@ traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.0.2</summary>
 
 ```text
 traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
@@ -2432,7 +2531,10 @@ traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.2.194</summary>
 
 ```text
 traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
@@ -2443,7 +2545,10 @@ traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.1.194</summary>
 
 ```text
 traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
@@ -2451,6 +2556,7 @@ traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
 #### monitoringServer
 
@@ -2492,6 +2598,8 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 </details>
 
 
+<details><summary>см. traceroute 192.168.255.1</summary>
+
 ```text
 traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
  1  gateway (192.168.0.65)  0.331 ms  0.192 ms  1.833 ms
@@ -2499,7 +2607,10 @@ traceroute to 192.168.255.1 (192.168.255.1), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.255.2</summary>
 
 ```text
 traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
@@ -2507,7 +2618,10 @@ traceroute to 192.168.255.2 (192.168.255.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.0.2</summary>
 
 ```text
 traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
@@ -2516,7 +2630,10 @@ traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.2.194</summary>
 
 ```text
 traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
@@ -2526,7 +2643,10 @@ traceroute to 192.168.2.194 (192.168.2.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
+
+<details><summary>см. traceroute 192.168.1.194</summary>
 
 ```text
 traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
@@ -2536,6 +2656,7 @@ traceroute to 192.168.1.194 (192.168.1.194), 30 hops max, 60 byte packets
 
 ```
 
+</details>
 
 #### Настройка бд
 
@@ -2731,6 +2852,8 @@ dbRouter                   : ok=8    changed=6    unreachable=0    failed=0    s
 
 
 
+<details><summary>см. local access check</summary>
+
 ```text
 psql -c 'SELECT version()' -U admin -h 127.0.0.1 project -W
 -------------------------------
@@ -2745,6 +2868,9 @@ ed Hat 4.8.5-44), 64-bit
 
 ```
 
+</details>
+
+<details><summary>см. remote access test from dbRouter</summary>
 
 ```text
 psql -c 'SELECT version()' -U admin -h 192.168.1.194 project -W
@@ -2760,6 +2886,9 @@ ed Hat 4.8.5-44), 64-bit
 
 ```
 
+</details>
+
+<details><summary>см. remote access test from appServer</summary>
 
 ```text
 psql -c 'SELECT version()' -U admin -h 192.168.1.194 project -W
@@ -2775,6 +2904,7 @@ ed Hat 4.8.5-44), 64-bit
 
 ```
 
+</details>
 
 
 #### Настройка nginx
@@ -2784,6 +2914,8 @@ ansible-playbook playbooks/nginx.yml --tags deploy_django > ../reports/playbooks
 ansible-playbook playbooks/intermediateTestOfWebAvailabilityFromExternalHost.yml> ./reports/playbooks/intermediateTestOfWebAvailabilityFromExternalHost.txt
 ```
 
+
+<details><summary>см. playbooks/nginx.yml</summary>
 
 ```text
 
@@ -2798,6 +2930,7 @@ webServer                  : ok=1    changed=0    unreachable=0    failed=0    s
 
 ```
 
+</details>
 
 
 <details><summary>см. playbooks/intermediateTestOfWebAvailabilityFromExternalHost.yml</summary>
