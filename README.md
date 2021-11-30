@@ -13,37 +13,39 @@
 
 ```text
 LEGENDS:
-# - network port-many commutators
-< ** > - routers with eth-cards hardware
-[ ** ] - servers hardware
-( ** ) - packagr infrastructure
+    * - this is 192.168.?.?
+    : - port mean
+    # - network port-many commutators
+< A > - computer-routers with eth-cards hardware
+[ B ] - servers hardware
+( C ) - package infrastructure
 
                      .-~~~-.
              .- ~ ~-(       )_ _~ -._
             \       INTERNET        .' 
               ~- . ___________ . -~'
                         |
+               < Internet Router > :8000,:8080,:8443
                         |
-               < Internet Router > :8080,:8443
+                        # *.255.1/30
                         |
-                        #
-:80 -> :443             |
-[ WebServer ]--#--< Central Router >
-   (Nginx)         |      |      |
-                   #      |      #
-                   |      #      |       
-        < AppRouter >     |    [ ManageServer ]
-          |               |     (rsyslog aggr) 
-          |               |     
-          |          < dbRouter >
-          |           |        | 
-[ AppServer ]         #        #     
-  (Gunicorn)          |        |   
-   (Django)     [ DbServer ]   |
-                    (PG)       |
-                               |
-                       [ BackupDbServer ]
-                             (***)
+   --------------- < Central Router > 
+  |                  |           |
+  # *.0.1/28         |           |
+  | :80 -> :443      # *.0.33/28 |
+[ WebServer ]       / \          |
+   (Nginx)     ____/   \         # *.0.65/26
+              |         \        |       
+        < AppRouter >    \     [ MonitoringServer ]
+         |                \       (rsyslog aggr) 
+         # *.2.193/26      |            (***)
+         |             < dbRouter >
+         |              | 
+[ AppServer ]           # *.1.193/26
+  (Gunicorn)           / \       
+   (Django)           /   \
+            [ DbServer ]  [ BackupDbServer ]
+                    (PG)     (***)
 ```
 
 ### Vagrant
