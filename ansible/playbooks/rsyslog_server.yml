@@ -1,0 +1,8 @@
+---
+- name: Playbook of rsyslog server configure
+  hosts:
+    - monitoringServer
+  become: yes
+  roles:
+    - role: '../roles/rsyslog_server'
+

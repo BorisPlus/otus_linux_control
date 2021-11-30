@@ -1,0 +1,114 @@
+---
+- name: Rsyslog | Configure UDP | Enable ModLoad imudp
+  replace:
+    path: '/etc/rsyslog.conf'
+    regexp: '#\$ModLoad\ imudp'
+    replace: '$ModLoad imudp'
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog-configure
+    - rsyslog-enable-udp
+    - deploy
+
+- name: Rsyslog | Configure UDP | Enable UDPServerRun 514
+  replace:
+    path: '/etc/rsyslog.conf'
+    regexp: '#\$UDPServerRun\ 514'
+    replace: "$UDPServerRun {{ rsyslog['port'] }}"
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog-configure
+    - rsyslog-enable-udp
+    - deploy
+
+- name: Rsyslog | open UDP ports
+  ansible.builtin.shell: |
+    yum install -y policycoreutils-python-2.5-34.el7.x86_64
+    policycoreutils-python-2.5-34.el7.x86_64
+    semanage port -m -t syslogd_port_t -p udp 514
+    iptables -A INPUT -p udp --dport 514 -j ACCEPT
+    exit 0
+  tags:
+    - rsyslog-configure
+    - rsyslog-enable-udp
+    - open-udp-ports
+    - deploy
+
+- name: Rsyslog | Configure TCP | Enable ModLoad imtcp
+  replace:
+    path: '/etc/rsyslog.conf'
+    regexp: '#\$ModLoad\ imtcp'
+    replace: '$ModLoad imtcp'
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog-configure
+    - rsyslog-enable-tcp
+    - deploy
+
+- name: Rsyslog | Configure TCP | Enable InputTCPServerRun 514
+  replace:
+    path: "/etc/rsyslog.conf"
+    regexp: '#\$InputTCPServerRun\ 514'
+    replace: "$InputTCPServerRun {{ rsyslog['port'] }}"
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog-configure
+    - rsyslog-enable-tcp
+    - deploy
+
+- name: Rsyslog | open TCP ports
+  ansible.builtin.shell: |
+    yum install -y policycoreutils-python-2.5-34.el7.x86_64
+    policycoreutils-python-2.5-34.el7.x86_64
+    semanage port -m -t syslogd_port_t -p tcp 514
+    iptables -A INPUT -p tcp --dport 514 -j ACCEPT
+    exit 0
+  tags:
+    - rsyslog-configure
+    - rsyslog-enable-tcp
+    - open-tcp-ports
+    - deploy
+
+- name: Rsyslog | Change log template formatting (make timestamp better)
+  replace:
+    path: '/etc/rsyslog.conf'
+    regexp: '\$ActionFileDefaultTemplate\ RSYSLOG_TraditionalFileFormat'
+    replace: '$ActionFileDefaultTemplate RSYSLOG_FileFormat'
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog-configure
+    - rsyslog-change-log-formatting
+    - deploy
+
+- name: Rsyslog | clear /etc/rsyslog.d/ and /var/log/rsyslog/
+  ansible.builtin.shell: |
+    rm -rf /etc/rsyslog.d/*
+    rm -rf /var/log/rsyslog/*
+    rm -ff /var/log/pcca/change.log
+    exit 0
+  tags:
+    - rsyslog-rules-configure
+    - clear-etc-rsyslogd
+    - deploy
+
+- name: Rsyslog program
+  template:
+    src: ../templates/programable.conf
+    dest: /etc/rsyslog.d/{{ program['file_name'] }}.conf
+  vars:
+    program: "{{ programs[item] }}"
+  with_items:
+    - nginx
+    - django_project
+    - postgresql
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog-rules-configure
+    - rsyslog-program
+    - deploy

@@ -1,0 +1,2 @@
+traceroute to 192.168.1.195 (192.168.1.195), 30 hops max, 60 byte packets
+ 1  dbBackupServer (192.168.1.195)  0.046 ms  0.014 ms  0.013 ms

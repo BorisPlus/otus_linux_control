@@ -1,0 +1,11 @@
+
+PLAY [Playbook of rsyslog clients] *********************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [dbServer]
+ok: [appServer]
+
+PLAY RECAP *********************************************************************
+appServer                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+dbServer                   : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

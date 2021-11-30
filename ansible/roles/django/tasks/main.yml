@@ -1,0 +1,150 @@
+---
+- name: Install EPEL Repo package from standart repo
+  yum:
+    name: epel-release
+    state: present
+  tags:
+    - install-epel-repo
+    - deploy
+
+- name: Install PostgreSQL repo
+  yum:
+    name: http://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present
+  tags:
+    - install-postgresql-repo
+    - install-postgresql
+    - deploy
+
+- name: Uninstall PostgreSQL packages
+  yum:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - postgresql13
+    - python3-psycopg2
+    - gunicorn
+  tags:
+    - uninstall-postgresql
+
+- name: Yum install
+  yum:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - postgresql13
+    - python-pip
+    - python3
+    - python3-psycopg2
+    - python3-gunicorn
+    - django
+  tags:
+    - yum-install
+    - deploy
+
+- name: Pip3 install packages
+  become: yes
+  pip:
+    name: "{{ item }}"
+    executable: pip3
+  loop:
+    - django
+  tags:
+    - pip3-install
+    - deploy
+
+- name: Django application deploy
+  become: no
+  copy:
+    src: ../files{{ item }}
+    dest: "{{ item }}"
+  loop:
+    - /home/vagrant/django_app/ # become: no
+  notify:
+    - systemctl-restart-gunicorn
+  tags:
+    - deploy-django
+    - deploy
+    - redeploy
+
+- name: Gunicorn service deploy
+  become: yes
+  copy:
+    src: ../files{{ item }}
+    dest: "{{ item }}"
+  loop:
+    - /etc/systemd/system/
+  notify:
+    - systemctl-restart-gunicorn
+  tags:
+    - gunicorn-service-deploy
+    - deploy
+
+- name: Gunicorn verify
+  become: yes
+  shell: systemd-analyze verify gunicorn.service
+  register: verify_gunicorn
+  tags:
+    - verify-gunicorn
+    - deploy
+
+- name: Print verify-gunicorn
+  debug:
+    msg: |
+      {{ verify_gunicorn }}
+  tags:
+    - verify-gunicorn
+    - deploy
+
+- name: Force restart gunicorn
+  become: yes
+  systemd:
+    name: gunicorn
+    state: restarted
+    enabled: true
+    daemon-reload: true
+  tags:
+    - force-restart-gunicorn
+    - deploy
+    - redeploy
+
+- name: django manage.py chmod
+  become: yes
+  shell: chmod 0755 /home/vagrant/django_app/manage.py
+  tags:
+    - makemigrations
+    - deploy
+
+- name: django makemigrations
+  django_manage:
+    command: makemigrations
+    app_path: /home/vagrant/django_app/
+    pythonpath: /usr/bin/python3
+  tags:
+    - makemigrations
+    - deploy
+
+- name: django migrate
+  django_manage:
+    command: migrate
+    app_path: /home/vagrant/django_app/
+    pythonpath: /usr/bin/python3
+  tags:
+    - migrate
+    - deploy
+
+- name: createsuperuser user --noinput
+  django_manage:
+    command: "createsuperuser --noinput --username=user --email=user@example.com"
+    app_path: /home/vagrant/django_app/
+  tags:
+    - createsuperuser-noinput
+
+
+- name: createsuperuser admin
+  django_manage:
+    command: 'shell -c "from django.contrib.auth.models import User; User.objects.create_superuser(''admin'', ''admin@example.com'', ''P@ssw0rd'')"'
+    app_path: /home/vagrant/django_app/
+  tags:
+    - createsuperuser
+    - deploy

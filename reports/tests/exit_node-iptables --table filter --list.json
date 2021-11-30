@@ -1,0 +1,15 @@
+iptables --table filter --list
+-------------------------------
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:http flags:FIN,SYN,RST,ACK/SYN ctstate NEW
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:https flags:FIN,SYN,RST,ACK/SYN ctstate NEW
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:irdmi flags:FIN,SYN,RST,ACK/SYN ctstate NEW
+ACCEPT     all  --  anywhere             anywhere             ctstate RELATED,ESTABLISHED
+ACCEPT     all  --  anywhere             anywhere             ctstate RELATED,ESTABLISHED
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         

@@ -1,0 +1,133 @@
+---
+- name: iptables configure
+  shell: "{{ item }}"
+  with_items:
+    - iptables -F
+    - iptables -X
+    - iptables -F -t nat
+    - iptables -P FORWARD ACCEPT
+    - iptables -P OUTPUT ACCEPT
+    - iptables -P INPUT ACCEPT
+    - iptables -t nat -A POSTROUTING -t nat -o eth0 -j MASQUERADE
+    - iptables -A FORWARD -i eth0 -o eth1 -p tcp --syn --dport 80 -m conntrack --ctstate NEW -j ACCEPT
+    - iptables -A FORWARD -i eth0 -o eth1 -p tcp --syn --dport 443 -m conntrack --ctstate NEW -j ACCEPT
+    - iptables -A FORWARD -i eth0 -o eth1 -p tcp --syn --dport 8000 -m conntrack --ctstate NEW -j ACCEPT
+    - iptables -A FORWARD -i eth0 -o eth1 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    - iptables -A FORWARD -i eth1 -o eth0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    - iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to-destination 192.168.0.2
+    - iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j DNAT --to-destination 192.168.0.2
+    - iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 8000 -j DNAT --to-destination 192.168.2.194
+    - iptables -t nat -A POSTROUTING -o eth1 -p tcp --dport 80 -d 192.168.0.2 -j SNAT --to-source 192.168.255.1
+    - iptables -t nat -A POSTROUTING -o eth1 -p tcp --dport 443 -d 192.168.0.2 -j SNAT --to-source 192.168.255.1
+    - iptables -t nat -A POSTROUTING -o eth1 -p tcp --dport 8000 -d 192.168.2.194 -j SNAT --to-source 192.168.255.1
+  tags:
+    - bashsible-forever-only
+    - bashsible-forever
+    - deploy
+
+- name: Iptables flush
+  iptables:
+    flush: yes
+  tags:
+    - DEPRICATED
+
+- name: Iptables flush nat
+  iptables:
+    table: nat
+    flush: yes
+  tags:
+    - DEPRICATED
+
+- name: Set the policy to ACCEPT
+  iptables:
+    chain: "{{ item }}"
+    policy: ACCEPT
+  with_items: [ 'OUTPUT', 'INPUT', 'FORWARD' ]
+  tags:
+    - DEPRICATED
+
+- name: OUTPUT
+  iptables:
+    chain: OUTPUT
+    jump: ACCEPT
+  tags:
+    - DEPRICATED
+
+- name: iptables masquerading
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    out_interface: eth0
+    jump: MASQUERADE
+  tags:
+    - DEPRICATED
+
+- name: iptables dnat
+  iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    destination_port: 80
+    to_destination: "192.168.0.2:80"
+    jump: DNAT
+  tags:
+    - DEPRICATED
+
+#
+
+- name: yum install iptables-services
+  yum:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - iptables-services
+  tags:
+    - bashsible-forever
+    - yum-install
+    - deploy
+
+- name: systemctl enable iptables
+  systemd:
+    name: iptables
+    enabled: true
+  tags:
+    - bashsible-forever
+    - enable-iptables
+    - deploy
+
+- name: service iptables save
+  shell: service iptables save
+  tags:
+    - bashsible-forever
+    - save-iptables
+    - deploy
+
+- name: iptables --table <table> --list
+  shell: "iptables --table {{ item }} --list"
+  with_items:
+    - filter
+    - nat
+    - mangle
+    - raw
+    - security
+  register: iptables_content
+  tags:
+    - bashsible-forever
+    - list-iptables
+    - deploy
+
+- name: strore | iptables --table <table> --list
+  become: no
+  local_action:
+    module: copy
+    content: |
+      {{ item['cmd'] }}
+      -------------------------------
+      {{ item['stdout'] }}
+    dest: "../../reports/tests/exit_node-{{ item['cmd'] }}.json"
+  loop: "{{ iptables_content['results'] }}"
+  tags:
+    - bashsible-forever
+    - list-iptables
+    - deploy
+

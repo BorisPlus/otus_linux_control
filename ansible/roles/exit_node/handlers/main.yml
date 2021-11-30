@@ -1,0 +1,5 @@
+
+- name: systemctl-restart-persisten
+  systemd:
+    state: restarted
+    name: persisten

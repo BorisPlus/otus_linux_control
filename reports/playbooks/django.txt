@@ -1,0 +1,70 @@
+
+PLAY [Playbook of django config] ***********************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [appServer]
+
+TASK [../roles/django : Install EPEL Repo package from standart repo] **********
+ok: [appServer]
+
+TASK [../roles/django : Install PostgreSQL repo] *******************************
+ok: [appServer]
+
+TASK [../roles/django : Yum install] *******************************************
+ok: [appServer] => (item=postgresql13)
+ok: [appServer] => (item=python-pip)
+ok: [appServer] => (item=python3)
+changed: [appServer] => (item=python3-psycopg2)
+changed: [appServer] => (item=python3-gunicorn)
+changed: [appServer] => (item=django)
+
+TASK [../roles/django : Pip3 install packages] *********************************
+changed: [appServer] => (item=django)
+
+TASK [../roles/django : Django application deploy] *****************************
+changed: [appServer] => (item=/home/vagrant/django_app/)
+
+TASK [../roles/django : Gunicorn service deploy] *******************************
+changed: [appServer] => (item=/etc/systemd/system/)
+
+TASK [../roles/django : Gunicorn verify] ***************************************
+changed: [appServer]
+
+TASK [../roles/django : Print verify-gunicorn] *********************************
+ok: [appServer] => {
+    "msg": {
+        "changed": true,
+        "cmd": "systemd-analyze verify gunicorn.service",
+        "delta": "0:00:00.237593",
+        "end": "2021-11-30 13:40:43.577131",
+        "failed": false,
+        "rc": 0,
+        "start": "2021-11-30 13:40:43.339538",
+        "stderr": "",
+        "stderr_lines": [],
+        "stdout": "",
+        "stdout_lines": []
+    }
+}
+
+TASK [../roles/django : Force restart gunicorn] ********************************
+changed: [appServer]
+
+TASK [../roles/django : django manage.py chmod] ********************************
+changed: [appServer]
+
+TASK [../roles/django : django makemigrations] *********************************
+ok: [appServer]
+
+TASK [../roles/django : django migrate] ****************************************
+changed: [appServer]
+
+TASK [../roles/django : createsuperuser admin] *********************************
+ok: [appServer]
+
+RUNNING HANDLER [../roles/django : systemctl-restart-gunicorn] *****************
+changed: [appServer]
+
+PLAY RECAP *********************************************************************
+appServer                  : ok=15   changed=9    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

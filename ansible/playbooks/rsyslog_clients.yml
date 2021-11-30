@@ -1,0 +1,8 @@
+---
+- name: Playbook of rsyslog clients
+  hosts:
+    - appServer
+    - dbServer
+  become: yes
+  roles:
+    - role: '../roles/rsyslog_clients'

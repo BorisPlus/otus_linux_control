@@ -1,0 +1,36 @@
+---
+- name: Rsyslog | Disable *.info core rule
+  replace:
+    path: '/etc/rsyslog.conf'
+    regexp: '\*\.info;mail.none;authpriv\.none;cron\.none'
+    replace: '#*.info;mail.none;authpriv.none;cron.none'
+    # backup: yes # поддерживает backup
+  notify:
+    - restart rsyslog
+  tags:
+    - rsyslog-disable-info-rule
+    - configure-rsyslog
+    - deploy
+
+#- name: Rsyslog basic | Configure send
+#  copy:
+#    src: ../files/etc/rsyslog.d/example.conf
+#    dest: /etc/rsyslog.d/{{ inventory_hostname }}.conf
+#  notify:
+#    - restart rsyslog
+#  tags:
+#    - configure-rsyslog
+#    - deploy
+
+- name: Rsyslog basic | Configure send
+  template:
+    src: ../files/etc/rsyslog.d/example.conf
+    dest: /etc/rsyslog.d/{{ program }}.conf
+  vars:
+    program: "{{ programs[inventory_hostname] }}"
+  notify:
+    - restart rsyslog
+  tags:
+    - configure-rsyslog
+    - deploy
+

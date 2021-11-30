@@ -1,0 +1,15 @@
+rsyslog:
+  logs_base_path: /var/log/rsyslog
+  hostlog_dir_name_template: '%HOSTNAME%-%FROMHOST-IP%'
+  hostlog_program_name_template: '%PROGRAMNAME%'
+  port: 514
+programs:
+  nginx:
+    name: nginx_access
+    file_name: nginx_access
+  postgresql:
+    name: postgresql
+    file_name: postgresql
+  django_project:
+    name: django_project
+    file_name: django_project

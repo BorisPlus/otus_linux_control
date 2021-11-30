@@ -1,0 +1,83 @@
+---
+- name: /etc/sysctl.d/disable-ipv6.conf
+  file:
+    path: /etc/sysctl.d/disable-ipv6.conf
+    state: touch
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - deploy
+
+- name: /etc/sysctl.d/disable-ipv6.conf | content
+  command: /bin/cat /etc/sysctl.d/disable-ipv6.conf
+  register: sysctl_conf_content
+  tags:
+    - deploy
+
+- name: /etc/sysctl.d/disable-ipv6.conf | net.ipv6.conf.all.disable_ipv6=1 | if does not yet
+  lineinfile:
+    insertafter: EOF
+    dest: /etc/sysctl.d/disable-ipv6.conf
+    line: "net.ipv6.conf.all.disable_ipv6=1"
+  when: not sysctl_conf_content is search("net.ipv6.conf.all.disable_ipv6")
+  notify:
+    - sysctl-p
+    - systemctl-restart-network
+  tags:
+    - deploy
+
+- name: /etc/sysctl.d/disable-ipv6.conf | net.ipv6.conf.all.disable_ipv6=1 | if it was early
+  replace:
+    path: /etc/sysctl.d/disable-ipv6.conf
+    regexp: 'net\.ipv6\.conf\.all\.disable_ipv6.*'
+    replace: 'net.ipv6.conf.all.disable_ipv6=1'
+  notify:
+    - sysctl-p
+    - systemctl-restart-network
+
+- name: /etc/sysctl.d/disable-ipv6.conf | net.ipv6.conf.default.disable_ipv6=1 | if does not yet
+  lineinfile:
+    insertafter: EOF
+    dest: /etc/sysctl.d/disable-ipv6.conf
+    line: "net.ipv6.conf.default.disable_ipv6=1"
+  when: not sysctl_conf_content is search("net.ipv6.conf.default.disable_ipv6")
+  notify:
+    - sysctl-p
+    - systemctl-restart-network
+  tags:
+    - deploy
+
+- name: /etc/sysctl.d/disable-ipv6.conf | net.ipv6.conf.default.disable_ipv6 = 1 | if it was early
+  replace:
+    path: /etc/sysctl.d/disable-ipv6.conf
+    regexp: 'net\.ipv6\.conf\.default\.disable_ipv6.*'
+    replace: 'net.ipv6.conf.default.disable_ipv6=1'
+  notify:
+    - sysctl-p
+    - systemctl-restart-network
+  tags:
+    - deploy
+
+- name: /etc/yum.conf | content
+  command: /bin/cat /etc/yum.conf
+  register: yum_conf_content
+  tags:
+    - deploy
+
+- name: /etc/yum.conf | ip_resolve=4 | if does not yet
+  lineinfile:
+    insertafter: EOF
+    dest: /etc/yum.conf
+    line: "ip_resolve=4"
+  when: not yum_conf_content is search("ip_resolve")
+  tags:
+    - deploy
+
+- name: /etc/yum.conf | ip_resolve=4 | if it was early
+  replace:
+    path: /etc/yum.conf
+    regexp: 'ip_resolve\s*=.*'
+    replace: 'ip_resolve=4'
+  tags:
+    - deploy

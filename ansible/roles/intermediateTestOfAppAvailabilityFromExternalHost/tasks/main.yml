@@ -1,0 +1,17 @@
+---
+- name: Check gunicorn/django response
+  uri:
+    url: http://192.168.2.194:8000
+    method: GET
+    return_content: yes
+  register: gd_response
+  tags:
+    - deploy
+
+- name: Store gunicorn/django response
+  local_action:
+    module: copy
+    content: "{{ gd_response }}"
+    dest: "../../reports/tests/app-{{ inventory_hostname }}-response-test.json"
+  tags:
+    - deploy

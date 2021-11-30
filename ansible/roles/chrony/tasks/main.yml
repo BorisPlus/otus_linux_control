@@ -1,0 +1,16 @@
+---
+- name: Synchronize datetime | Install chrony
+  yum:
+    name: chrony
+    state: latest
+  tags:
+    - deploy
+
+- name: Synchronize datetime | Turn on chronyd
+  service:
+    name: chronyd
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  tags:
+    - deploy

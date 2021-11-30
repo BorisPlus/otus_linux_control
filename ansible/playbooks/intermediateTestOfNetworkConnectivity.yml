@@ -1,0 +1,14 @@
+---
+- name: Playbook of test network connectivity
+  hosts:
+    - internetRouter
+    - centralRouter
+    - webServer
+    - appRouter
+    - appServer
+    - dbRouter
+    - dbServer
+    - dbBackupServer
+    - monitoringServer
+  roles:
+    - role: '../roles/intermediateTestOfNetworkConnectivity'

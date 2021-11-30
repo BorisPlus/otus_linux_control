@@ -1,0 +1,87 @@
+
+PLAY [Playbook of intermediate test of external db connection] *****************
+
+TASK [Gathering Facts] *********************************************************
+ok: [appServer]
+ok: [dbRouter]
+
+TASK [../roles/intermediateTestOfDbAvailabilityFromExternalHost : Install EPEL Repo package from standart repo] ***
+changed: [dbRouter]
+changed: [appServer]
+
+TASK [../roles/intermediateTestOfDbAvailabilityFromExternalHost : Install PostgreSQL repo] ***
+changed: [dbRouter]
+changed: [appServer]
+
+TASK [../roles/intermediateTestOfDbAvailabilityFromExternalHost : Yum install] ***
+changed: [appServer] => (item=postgresql13)
+changed: [dbRouter] => (item=postgresql13)
+changed: [appServer] => (item=python3)
+changed: [dbRouter] => (item=python3)
+changed: [appServer] => (item=python-pip)
+changed: [dbRouter] => (item=python-pip)
+
+TASK [../roles/intermediateTestOfDbAvailabilityFromExternalHost : pip & pip3 install pexpect] ***
+changed: [appServer] => (item=pip)
+changed: [dbRouter] => (item=pip)
+changed: [appServer] => (item=pip3)
+changed: [dbRouter] => (item=pip3)
+
+TASK [../roles/intermediateTestOfDbAvailabilityFromExternalHost : Check remote db access] ***
+changed: [appServer]
+changed: [dbRouter]
+
+TASK [../roles/intermediateTestOfDbAvailabilityFromExternalHost : Print result of check remote db access] ***
+ok: [dbRouter] => {
+    "msg": {
+        "changed": true,
+        "cmd": "psql -c 'SELECT version()' -U admin -h 192.168.1.194 project -W",
+        "delta": "0:00:00.247329",
+        "end": "2021-11-30 13:34:34.875805",
+        "failed": false,
+        "rc": 0,
+        "start": "2021-11-30 13:34:34.628476",
+        "stdout": "Пароль: \r\n                                                 version                        \r\n                         \r\n--------------------------------------------------------------------------------\r\n-------------------------\r\n PostgreSQL 13.5 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (R\r\ned Hat 4.8.5-44), 64-bit\r\n(1 строка)",
+        "stdout_lines": [
+            "Пароль: ",
+            "                                                 version                        ",
+            "                         ",
+            "--------------------------------------------------------------------------------",
+            "-------------------------",
+            " PostgreSQL 13.5 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (R",
+            "ed Hat 4.8.5-44), 64-bit",
+            "(1 строка)"
+        ]
+    }
+}
+ok: [appServer] => {
+    "msg": {
+        "changed": true,
+        "cmd": "psql -c 'SELECT version()' -U admin -h 192.168.1.194 project -W",
+        "delta": "0:00:00.245639",
+        "end": "2021-11-30 13:34:34.894914",
+        "failed": false,
+        "rc": 0,
+        "start": "2021-11-30 13:34:34.649275",
+        "stdout": "Пароль: \r\n                                                 version                        \r\n                         \r\n--------------------------------------------------------------------------------\r\n-------------------------\r\n PostgreSQL 13.5 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (R\r\ned Hat 4.8.5-44), 64-bit\r\n(1 строка)",
+        "stdout_lines": [
+            "Пароль: ",
+            "                                                 version                        ",
+            "                         ",
+            "--------------------------------------------------------------------------------",
+            "-------------------------",
+            " PostgreSQL 13.5 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (R",
+            "ed Hat 4.8.5-44), 64-bit",
+            "(1 строка)"
+        ]
+    }
+}
+
+TASK [../roles/intermediateTestOfDbAvailabilityFromExternalHost : Store result of check remote db access] ***
+changed: [dbRouter -> localhost]
+changed: [appServer -> localhost]
+
+PLAY RECAP *********************************************************************
+appServer                  : ok=8    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+dbRouter                   : ok=8    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

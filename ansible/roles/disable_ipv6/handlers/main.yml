@@ -1,0 +1,15 @@
+---
+- name: sysctl-p
+  shell: sysctl -p
+
+- name: yum-clean-all
+  command: yum clean all
+
+- name: yum-update
+  yum:
+    update_cache: yes
+
+- name: systemctl-restart-network
+  systemd:
+    state: restarted
+    name: network

@@ -1,0 +1,41 @@
+
+PLAY [Playbook of rsyslog server configure] ************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [monitoringServer]
+
+TASK [../roles/rsyslog_server : Rsyslog | Configure UDP | Enable ModLoad imudp] ***
+changed: [monitoringServer]
+
+TASK [../roles/rsyslog_server : Rsyslog | Configure UDP | Enable UDPServerRun 514] ***
+changed: [monitoringServer]
+
+TASK [../roles/rsyslog_server : Rsyslog | open UDP ports] **********************
+changed: [monitoringServer]
+
+TASK [../roles/rsyslog_server : Rsyslog | Configure TCP | Enable ModLoad imtcp] ***
+changed: [monitoringServer]
+
+TASK [../roles/rsyslog_server : Rsyslog | Configure TCP | Enable InputTCPServerRun 514] ***
+changed: [monitoringServer]
+
+TASK [../roles/rsyslog_server : Rsyslog | open TCP ports] **********************
+changed: [monitoringServer]
+
+TASK [../roles/rsyslog_server : Rsyslog | Change log template formatting (make timestamp better)] ***
+changed: [monitoringServer]
+
+TASK [../roles/rsyslog_server : Rsyslog | clear /etc/rsyslog.d/ and /var/log/rsyslog/] ***
+changed: [monitoringServer]
+
+TASK [../roles/rsyslog_server : Rsyslog program] *******************************
+changed: [monitoringServer] => (item=nginx)
+changed: [monitoringServer] => (item=django_project)
+changed: [monitoringServer] => (item=postgresql)
+
+RUNNING HANDLER [../roles/rsyslog_server : restart rsyslog] ********************
+changed: [monitoringServer]
+
+PLAY RECAP *********************************************************************
+monitoringServer           : ok=11   changed=10   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

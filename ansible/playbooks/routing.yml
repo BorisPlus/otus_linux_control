@@ -1,0 +1,15 @@
+---
+- name: Playbook of eth[X] configure
+  hosts:
+    - internetRouter
+    - centralRouter
+    - webServer
+    - appRouter
+    - appServer
+    - dbRouter
+    - dbServer
+    - dbBackupServer
+    - monitoringServer
+  become: yes
+  roles:
+    - role: '../roles/routing'

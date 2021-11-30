@@ -1,0 +1,8 @@
+---
+- name: Playbook of django config
+  hosts:
+    - appServer
+  become: yes
+  roles:
+    - role: '../roles/django'
+

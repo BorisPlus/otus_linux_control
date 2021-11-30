@@ -1,0 +1,15 @@
+---
+- name: Playbook of ip v6 disable
+  hosts:
+    - internetRouter
+    - centralRouter
+    - webServer
+    - appRouter
+    - appServer
+    - dbRouter
+    - dbServer
+    - dbBackupServer
+    - monitoringServer
+  become: yes
+  roles:
+    - role: '../roles/disable_ipv6'

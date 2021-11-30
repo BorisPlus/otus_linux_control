@@ -1,0 +1,58 @@
+---
+- name: yum install traceroute
+  yum:
+    name: traceroute
+    state: latest
+  become: yes
+  tags:
+    - yum-install
+    - traceroute
+    - deploy
+
+- name: test | demostration
+  debug:
+    msg: "I am {{ inventory_hostname }}, I get self name from `inventory_hostname` ansible-variable."
+
+- name: test | traceroute foreign host
+  shell: traceroute {{ item }}
+  loop: "{{ to }}"
+  ignore_errors: true
+  register: traceroute_content
+  tags:
+    - clear
+    - naming
+    - deploy
+
+- name: test | delete preverios report
+  local_action:
+    module: file
+    path: "../../reports/tests/routing/{{ inventory_hostname }} - {{ item['cmd'] }}.txt"
+    force: yes
+    state: absent
+  loop: "{{ traceroute_content['results'] }}"
+  tags:
+    - traceroute
+    - clear
+    - deploy
+
+- name: test | strore trace result
+  local_action:
+    module: lineinfile
+    dest: "../../reports/tests/routing/{{ inventory_hostname }} - {{ item['cmd'] }}.txt"
+    line: "{{ item['stdout'] }}"
+    create: yes
+  loop: "{{ traceroute_content['results'] }}"
+  changed_when: true
+  tags:
+    - traceroute
+    - deploy
+
+- name: yum uninstall traceroute
+  become: yes
+  yum:
+    name: traceroute
+    state: absent
+  tags:
+    - clear
+    - traceroute
+    - deploy

@@ -1,0 +1,8 @@
+**/.vagrant
+**/.ansible/**
+**/tmp
+**/guest
+**/guest/**
+**/common/**
+**/**.log
+**/ansible/inventories/hosts

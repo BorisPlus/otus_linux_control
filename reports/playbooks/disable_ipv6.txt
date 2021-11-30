@@ -1,0 +1,135 @@
+
+PLAY [Playbook of ip v6 disable] ***********************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [internetRouter]
+ok: [webServer]
+ok: [appRouter]
+ok: [appServer]
+ok: [centralRouter]
+ok: [dbServer]
+ok: [dbRouter]
+ok: [dbBackupServer]
+ok: [monitoringServer]
+
+TASK [../roles/disable_ipv6 : /etc/sysctl.d/disable-ipv6.conf] *****************
+changed: [webServer]
+changed: [appRouter]
+changed: [appServer]
+changed: [centralRouter]
+changed: [internetRouter]
+changed: [dbRouter]
+changed: [dbServer]
+changed: [monitoringServer]
+changed: [dbBackupServer]
+
+TASK [../roles/disable_ipv6 : /etc/sysctl.d/disable-ipv6.conf | content] *******
+changed: [centralRouter]
+changed: [webServer]
+changed: [appServer]
+changed: [appRouter]
+changed: [internetRouter]
+changed: [dbRouter]
+changed: [dbBackupServer]
+changed: [dbServer]
+changed: [monitoringServer]
+
+TASK [../roles/disable_ipv6 : /etc/sysctl.d/disable-ipv6.conf | net.ipv6.conf.all.disable_ipv6=1 | if does not yet] ***
+changed: [internetRouter]
+changed: [appServer]
+changed: [appRouter]
+changed: [centralRouter]
+changed: [webServer]
+changed: [dbServer]
+changed: [dbRouter]
+changed: [monitoringServer]
+changed: [dbBackupServer]
+
+TASK [../roles/disable_ipv6 : /etc/sysctl.d/disable-ipv6.conf | net.ipv6.conf.default.disable_ipv6=1 | if does not yet] ***
+changed: [internetRouter]
+changed: [centralRouter]
+changed: [appRouter]
+changed: [appServer]
+changed: [webServer]
+changed: [dbServer]
+changed: [dbRouter]
+changed: [dbBackupServer]
+changed: [monitoringServer]
+
+TASK [../roles/disable_ipv6 : /etc/sysctl.d/disable-ipv6.conf | net.ipv6.conf.default.disable_ipv6 = 1 | if it was early] ***
+ok: [appRouter]
+ok: [centralRouter]
+ok: [webServer]
+ok: [internetRouter]
+ok: [appServer]
+ok: [dbServer]
+ok: [monitoringServer]
+ok: [dbBackupServer]
+ok: [dbRouter]
+
+TASK [../roles/disable_ipv6 : /etc/yum.conf | content] *************************
+changed: [centralRouter]
+changed: [internetRouter]
+changed: [appRouter]
+changed: [webServer]
+changed: [appServer]
+changed: [dbServer]
+changed: [dbRouter]
+changed: [dbBackupServer]
+changed: [monitoringServer]
+
+TASK [../roles/disable_ipv6 : /etc/yum.conf | ip_resolve=4 | if does not yet] ***
+changed: [appRouter]
+changed: [centralRouter]
+changed: [webServer]
+changed: [internetRouter]
+changed: [appServer]
+changed: [dbRouter]
+changed: [dbBackupServer]
+changed: [dbServer]
+changed: [monitoringServer]
+
+TASK [../roles/disable_ipv6 : /etc/yum.conf | ip_resolve=4 | if it was early] ***
+ok: [webServer]
+ok: [internetRouter]
+ok: [appServer]
+ok: [centralRouter]
+ok: [appRouter]
+ok: [dbRouter]
+ok: [dbBackupServer]
+ok: [dbServer]
+ok: [monitoringServer]
+
+RUNNING HANDLER [../roles/disable_ipv6 : sysctl-p] *****************************
+changed: [webServer]
+changed: [appServer]
+changed: [centralRouter]
+changed: [appRouter]
+changed: [internetRouter]
+changed: [dbServer]
+changed: [monitoringServer]
+changed: [dbRouter]
+changed: [dbBackupServer]
+
+RUNNING HANDLER [../roles/disable_ipv6 : systemctl-restart-network] ************
+changed: [internetRouter]
+changed: [appServer]
+changed: [webServer]
+changed: [dbServer]
+changed: [monitoringServer]
+changed: [appRouter]
+changed: [centralRouter]
+changed: [dbRouter]
+changed: [dbBackupServer]
+
+PLAY RECAP *********************************************************************
+appRouter                  : ok=11   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+appServer                  : ok=11   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+centralRouter              : ok=11   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+dbBackupServer             : ok=11   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+dbRouter                   : ok=11   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+dbServer                   : ok=11   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+internetRouter             : ok=11   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+monitoringServer           : ok=11   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+webServer                  : ok=11   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

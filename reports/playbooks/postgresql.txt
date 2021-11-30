@@ -1,0 +1,77 @@
+
+PLAY [Playbook of db configure] ************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [dbServer]
+
+TASK [../roles/postgresql : Install EPEL Repo package from standart repo] ******
+changed: [dbServer]
+
+TASK [../roles/postgresql : Install PostgreSQL repo] ***************************
+changed: [dbServer]
+
+TASK [../roles/postgresql : Yum install] ***************************************
+changed: [dbServer] => (item=postgresql13-server)
+changed: [dbServer] => (item=python3)
+changed: [dbServer] => (item=python-pip)
+changed: [dbServer] => (item=python-psycopg2)
+
+TASK [../roles/postgresql : pip & pip3 install pexpect | ISSUE] ****************
+changed: [dbServer] => (item=pip)
+changed: [dbServer] => (item=pip3)
+
+TASK [../roles/postgresql : Init PostgreSQL] ***********************************
+changed: [dbServer]
+
+TASK [../roles/postgresql : Collect-pg.conf-files] *****************************
+changed: [dbServer] => (item=pg_hba.conf)
+changed: [dbServer] => (item=postgresql.conf)
+
+TASK [../roles/postgresql : Force restart PostgreSQL] **************************
+changed: [dbServer]
+
+TASK [../roles/postgresql : Create project database] ***************************
+changed: [dbServer]
+
+TASK [../roles/postgresql : Create postgres user for project] ******************
+changed: [dbServer]
+
+TASK [../roles/postgresql : Ensure we have access from the new user] ***********
+ok: [dbServer]
+
+TASK [../roles/postgresql : Check local PostgreSQL access] *********************
+changed: [dbServer]
+
+TASK [../roles/postgresql : Print result of check local PostgreSQL access] *****
+ok: [dbServer] => {
+    "msg": {
+        "changed": true,
+        "cmd": "psql -c 'SELECT version()' -U admin -h 127.0.0.1 project -W",
+        "delta": "0:00:00.250540",
+        "end": "2021-11-30 13:30:06.952218",
+        "failed": false,
+        "rc": 0,
+        "start": "2021-11-30 13:30:06.701678",
+        "stdout": "Пароль: \r\n                                                 version                        \r\n                         \r\n--------------------------------------------------------------------------------\r\n-------------------------\r\n PostgreSQL 13.5 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (R\r\ned Hat 4.8.5-44), 64-bit\r\n(1 строка)",
+        "stdout_lines": [
+            "Пароль: ",
+            "                                                 version                        ",
+            "                         ",
+            "--------------------------------------------------------------------------------",
+            "-------------------------",
+            " PostgreSQL 13.5 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (R",
+            "ed Hat 4.8.5-44), 64-bit",
+            "(1 строка)"
+        ]
+    }
+}
+
+TASK [../roles/postgresql : Store result of check local PostgreSQL access] *****
+changed: [dbServer -> localhost]
+
+RUNNING HANDLER [../roles/postgresql : restart-postgresql] *********************
+changed: [dbServer]
+
+PLAY RECAP *********************************************************************
+dbServer                   : ok=15   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

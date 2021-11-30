@@ -1,0 +1,103 @@
+---
+- name: Install EPEL Repo package from standart repo
+  yum:
+    name: epel-release
+    state: present
+  tags:
+    - install-epel-repo
+    - deploy-test
+    - redeploy-test
+    - deploy
+
+- name: NGINX | Install NGINX package from EPEL Repo
+  yum:
+    name: nginx
+    state: latest
+  notify:
+    - restart nginx
+  tags:
+    - install-nginx-package
+    - deploy-test
+    - redeploy-test
+    - deploy
+
+- name: NGINX | Configure
+  template:
+    src: ../files{{ item }}
+    dest: "{{ item }}"
+  loop:
+    - /etc/nginx/nginx.conf
+    - /usr/share/nginx/html/index.html
+  notify:
+    - restart nginx
+  tags:
+    - configure-nginx
+    - deploy-test
+    - redeploy-test
+
+- name: NGINX | Configure for Django
+  copy:
+    src: ../files{{ item }}.django
+    dest: "{{ item }}"
+  loop:
+    - /etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+  tags:
+    - configure-nginx-django
+    - deploy
+
+- name: NGINX | Configure for Django
+  copy:
+    src: ../files{{ item }}.django8080
+    dest: "{{ item }}"
+  loop:
+    - /etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+  tags:
+    - configure-nginx-django8080
+    - deploy
+
+- name: NGINX | Configure for Django
+  copy:
+    src: ../files{{ item }}.django_without_static_manage
+    dest: "{{ item }}"
+  loop:
+    - /etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+  tags:
+    - configure-nginx-django_without_static_manage
+    - deploy
+
+- name: NGINX | Configure for Django | certs
+  copy:
+    src: ../files/etc/nginx/certs/{{ item }}
+    dest: /etc/nginx/
+  loop:
+    - nginx-selfsigned.crt
+    - nginx-selfsigned.key
+  notify:
+    - restart nginx
+  tags:
+    - configure-nginx-certs
+    - deploy
+
+- name: NGINX | Configure for Django | static
+  copy:
+    src: ../files/usr/share/nginx/{{ item }}
+    dest: /usr/share/nginx/
+  loop:
+    - static
+  notify:
+    - restart nginx
+  tags:
+    - configure-nginx-static
+    - deploy
+
+- name: NGINX | Configure for Django | setsebool
+  shell: setsebool -P httpd_can_network_connect 1
+  tags:
+    - configure-httpd-setsebool
+    - deploy

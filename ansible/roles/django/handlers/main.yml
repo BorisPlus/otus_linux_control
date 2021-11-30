@@ -1,0 +1,17 @@
+---
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+- name: reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
+
+- name: systemctl-restart-gunicorn
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: gunicorn

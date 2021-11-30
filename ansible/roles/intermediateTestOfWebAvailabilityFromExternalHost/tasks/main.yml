@@ -1,0 +1,19 @@
+---
+- name: Check web response
+  uri:
+    url: http://192.168.0.2
+    validate_certs: no
+    method: GET
+    return_content: yes
+  register: web_response
+  tags:
+    - deploy
+
+- name: Store web response
+  become: no
+  local_action:
+    module: copy
+    content: "{{ web_response }}"
+    dest: "../../reports/tests/web-{{ inventory_hostname }}-{{ test_name | default('default') }}.json"
+  tags:
+    - deploy

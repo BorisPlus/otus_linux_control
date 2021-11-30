@@ -1,0 +1,16 @@
+---
+- name: Playbook of network hosts initialization
+  hosts:
+    - inetRouter
+    - centralRouter
+    - nginxServer
+    - appRouter
+    - djangoServer
+    - dbRouter
+    - dbBackupServer
+    - monitoringServer
+  become: yes
+  roles:
+    - role: '../roles/network-hosts'
+      tags:
+      - deploy

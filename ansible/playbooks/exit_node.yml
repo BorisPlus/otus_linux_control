@@ -1,0 +1,7 @@
+---
+- name: Playbook of exit-node configure
+  hosts:
+    - internetRouter
+  become: true
+  roles:
+    - role: '../roles/exit_node'

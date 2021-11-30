@@ -1,0 +1,20 @@
+iptables --table nat --list
+-------------------------------
+Chain PREROUTING (policy ACCEPT)
+target     prot opt source               destination         
+DNAT       tcp  --  anywhere             anywhere             tcp dpt:http to:192.168.0.2
+DNAT       tcp  --  anywhere             anywhere             tcp dpt:https to:192.168.0.2
+DNAT       tcp  --  anywhere             anywhere             tcp dpt:irdmi to:192.168.2.194
+
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain POSTROUTING (policy ACCEPT)
+target     prot opt source               destination         
+MASQUERADE  all  --  anywhere             anywhere            
+SNAT       tcp  --  anywhere             192.168.0.2          tcp dpt:http to:192.168.255.1
+SNAT       tcp  --  anywhere             192.168.0.2          tcp dpt:https to:192.168.255.1
+SNAT       tcp  --  anywhere             192.168.2.194        tcp dpt:irdmi to:192.168.255.1

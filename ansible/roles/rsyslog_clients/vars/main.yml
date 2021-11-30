@@ -1,0 +1,3 @@
+programs:
+  appServer: django_project
+  dbServer: postgresql

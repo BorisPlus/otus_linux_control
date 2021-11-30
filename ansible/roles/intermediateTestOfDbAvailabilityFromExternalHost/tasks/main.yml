@@ -1,0 +1,65 @@
+---
+- name: Install EPEL Repo package from standart repo
+  yum:
+    name: epel-release
+    state: present
+  tags:
+    - deploy
+
+- name: Install PostgreSQL repo
+  yum:
+    name: http://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present
+  tags:
+    - deploy
+
+- name: Yum install
+  yum:
+    name: "{{ item }}"
+  loop:
+    - postgresql13
+    - python3
+    - python-pip
+  tags:
+    - deploy
+
+- name: pip & pip3 install pexpect
+  pip:
+    name: pexpect
+    executable: "{{ item }}"
+  loop:
+    - pip
+    - pip3
+  tags:
+    - pip-install
+    - deploy
+    - redeploy
+
+- name: Check remote db access
+  become: yes
+  expect:
+    command: psql -c 'SELECT version()' -U admin -h 192.168.1.194 project -W
+    responses:
+      '(.*):(.*)': 'P@ssw0rd'
+  register: remote_access_check
+  tags:
+    - deploy
+
+- name: Print result of check remote db access
+  debug:
+    msg: |
+      {{ remote_access_check }}
+  tags:
+    - deploy
+
+- name: Store result of check remote db access
+  become: no
+  local_action:
+    module: copy
+    content: |
+      {{ remote_access_check['cmd'] }}
+      -------------------------------
+      {{ remote_access_check['stdout'] }}
+    dest: "../../reports/tests/postgresql-{{ inventory_hostname }}-remote-access-test.txt"
+  tags:
+    - deploy

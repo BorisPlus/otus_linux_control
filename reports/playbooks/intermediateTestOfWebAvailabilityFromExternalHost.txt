@@ -1,0 +1,12 @@
+
+PLAY [Playbook of intermediate test web server availability] *******************
+
+TASK [Gathering Facts] *********************************************************
+ok: [centralRouter]
+
+TASK [../roles/intermediateTestOfWebAvailabilityFromExternalHost : Check web response] ***
+fatal: [centralRouter]: FAILED! => {"changed": false, "content": "", "elapsed": 0, "msg": "Status code was -1 and not [200]: Request failed: <urlopen error [Errno 111] В соединении отказано>", "redirected": false, "status": -1, "url": "http://192.168.0.2"}
+
+PLAY RECAP *********************************************************************
+centralRouter              : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+

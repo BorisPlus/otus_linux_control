@@ -1,0 +1,12 @@
+
+PLAY [Playbook of intermediate test of app access] *****************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [appRouter]
+
+TASK [../roles/intermediateTestOfAppAvailabilityFromExternalHost : Check gunicorn/django response] ***
+fatal: [appRouter]: FAILED! => {"changed": false, "connection": "close", "content": "\n<!doctype html>\n<html lang=\"en\">\n<head>\n  <title>Not Found</title>\n</head>\n<body>\n  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>\n</body>\n</html>\n", "content_length": "179", "content_type": "text/html", "date": "Tue, 30 Nov 2021 13:41:03 GMT", "elapsed": 0, "msg": "Status code was 404 and not [200]: HTTP Error 404: Not Found", "redirected": false, "referrer_policy": "same-origin", "server": "gunicorn/20.0.4", "status": 404, "url": "http://192.168.2.194:8000", "x_content_type_options": "nosniff", "x_frame_options": "DENY"}
+
+PLAY RECAP *********************************************************************
+appRouter                  : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+

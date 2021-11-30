@@ -1,0 +1,171 @@
+---
+- name: Install EPEL Repo package from standart repo
+  yum:
+    name: epel-release
+    state: present
+  tags:
+    - install-epel-repo
+    - deploy
+    - redeploy
+
+- name: Install PostgreSQL repo
+  yum:
+    name: http://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present
+  tags:
+    - install-postgresql-repo
+    - install-postgresql
+    - deploy
+    - redeploy
+
+- name: Yum uninstall
+  yum:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - postgresql13-server
+    - python3
+    - python-psycopg2
+  tags:
+    - uninstall-postgresql
+    - redeploy
+
+- name: Remove PostgreSQL data dir
+  file:
+    path: /var/lib/pgsql/13/
+    state: absent
+    force: yes
+  tags:
+    - remove-postgresql-data-dir
+    - uninstall-postgresql
+    - redeploy
+
+- name: Yum install
+  yum:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - postgresql13-server
+    - python3
+    - python-pip
+    - python-psycopg2
+  tags:
+    - yum-install
+    - deploy
+    - redeploy
+
+- name: pip & pip3 install pexpect | ISSUE
+  pip:
+    name: pexpect
+    executable: "{{ item }}"
+  loop:
+    - pip
+    - pip3
+  tags:
+    - pip-install
+    - deploy
+    - redeploy
+
+- name: Init PostgreSQL
+  shell: /usr/pgsql-13/bin/postgresql-13-setup initdb
+  tags:
+    - init-postgresql
+    - deploy
+    - redeploy
+
+- name: Collect-pg.conf-files
+  copy:
+    src: ../files/{{ item }}
+    dest: /var/lib/pgsql/13/data/{{ item }}
+  loop:
+    - pg_hba.conf
+    - postgresql.conf
+  tags:
+    - collect-pg.conf-files
+    - deploy
+    - redeploy
+  notify:
+    - restart-postgresql
+
+- name: Force restart PostgreSQL
+  systemd:
+    name: postgresql-13
+    state: restarted
+    enabled: true
+  tags:
+    - force-restart-postgresql
+    - deploy
+    - redeploy
+
+- name: Create project database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: project
+    encoding: UTF-8
+    template: template0
+    state: present
+  tags:
+    - create-postgresql-db
+    - deploy
+    - redeploy
+
+- name: Create postgres user for project
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: "admin"
+    password: "P@ssw0rd"
+    role_attr_flags: "CREATEDB,NOSUPERUSER"
+  tags:
+    - create-postgresql-user
+    - deploy
+    - redeploy
+
+- name: Ensure we have access from the new user
+  become: yes
+  become_user: postgres
+  postgresql_privs:
+    db: project
+    role: admin
+    objs: ALL_IN_SCHEMA
+    privs: SELECT,INSERT,UPDATE,DELETE
+  tags:
+    - privs-postgresql-user
+    - deploy
+    - redeploy
+
+- name: Check local PostgreSQL access
+  become_user: postgres
+  expect:
+    command: psql -c 'SELECT version()' -U admin -h 127.0.0.1 project -W
+    responses:
+      '(.*):(.*)': 'P@ssw0rd'
+  register: local_access_check
+  tags:
+    - local-access-check
+    - deploy
+    - redeploy
+
+- name: Print result of check local PostgreSQL access
+  debug:
+    msg: |
+      {{ local_access_check }}
+  tags:
+    - local-access-check
+    - deploy
+    - redeploy
+
+- name: Store result of check local PostgreSQL access
+  become: no
+  local_action:
+    module: copy
+    content: |
+      {{ local_access_check['cmd'] }}
+      -------------------------------
+      {{ local_access_check['stdout'] }}
+    dest: "../../reports/tests/postresql-{{ inventory_hostname }}-local_access_check-{{ local_access_check['cmd'] | replace(',', '_') | replace(';', '-') | replace(' ', '-') | replace(\"'\", '') }}.txt"
+  tags:
+    - local-access-check
+    - deploy
+    - redeploy

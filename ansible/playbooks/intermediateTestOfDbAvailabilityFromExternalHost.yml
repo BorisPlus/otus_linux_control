@@ -1,0 +1,8 @@
+---
+- name: Playbook of intermediate test of external db connection
+  become: yes
+  hosts:
+    - dbRouter
+    - appServer
+  roles:
+    - role: '../roles/intermediateTestOfDbAvailabilityFromExternalHost'

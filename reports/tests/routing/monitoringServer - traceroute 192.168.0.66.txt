@@ -1,0 +1,2 @@
+traceroute to 192.168.0.66 (192.168.0.66), 30 hops max, 60 byte packets
+ 1  monitoringServer (192.168.0.66)  0.043 ms  0.013 ms  0.013 ms

@@ -1,0 +1,7 @@
+iptables --table raw --list
+-------------------------------
+Chain PREROUTING (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         

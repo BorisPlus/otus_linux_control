@@ -1,0 +1,8 @@
+---
+- name: Playbook of intermediate test of app access
+  become: no
+  hosts:
+    - appRouter
+  roles:
+    - role: '../roles/intermediateTestOfAppAvailabilityFromExternalHost'
+

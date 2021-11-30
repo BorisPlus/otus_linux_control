@@ -1,0 +1,47 @@
+
+PLAY [Playbook of time chrony] *************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [centralRouter]
+ok: [appServer]
+ok: [appRouter]
+ok: [internetRouter]
+ok: [webServer]
+ok: [monitoringServer]
+ok: [dbRouter]
+ok: [dbBackupServer]
+ok: [dbServer]
+
+TASK [../roles/chrony : Synchronize datetime | Install chrony] *****************
+ok: [appServer]
+ok: [webServer]
+ok: [internetRouter]
+ok: [appRouter]
+ok: [centralRouter]
+ok: [monitoringServer]
+ok: [dbRouter]
+ok: [dbBackupServer]
+ok: [dbServer]
+
+TASK [../roles/chrony : Synchronize datetime | Turn on chronyd] ****************
+ok: [internetRouter]
+ok: [webServer]
+ok: [centralRouter]
+ok: [appRouter]
+ok: [appServer]
+ok: [dbServer]
+ok: [dbRouter]
+ok: [monitoringServer]
+ok: [dbBackupServer]
+
+PLAY RECAP *********************************************************************
+appRouter                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+appServer                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+centralRouter              : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+dbBackupServer             : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+dbRouter                   : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+dbServer                   : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+internetRouter             : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+monitoringServer           : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+webServer                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
